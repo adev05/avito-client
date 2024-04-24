@@ -1,5 +1,14 @@
+import authService from '@/services/auth.service'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+
+declare module 'next-auth' {
+	interface Session {
+		id: number
+		username: string
+		role: string
+	}
+}
 
 export const authOptions = {
 	providers: [
@@ -8,14 +17,23 @@ export const authOptions = {
 			name: 'Avito auth',
 
 			credentials: {
-				username: { label: 'Username', type: 'text', placeholder: 'jsmith' },
-				password: { label: 'Password', type: 'password' },
+				username: { label: 'username', type: 'text' },
+				password: { label: 'password', type: 'password' },
 			},
 			async authorize(credentials, req) {
-				const user = { id: '1', name: 'J Smith', email: 'jsmith@example.com' }
+				console.log(credentials)
 
-				if (user) {
-					return user
+				const response = await authService.signIn(
+					credentials.username,
+					credentials.password
+				)
+
+				if (!response) return null
+
+				console.log('response', response)
+
+				if (response) {
+					return response
 				} else {
 					return null
 				}
@@ -25,9 +43,30 @@ export const authOptions = {
 
 	callbacks: {
 		async session({ session, token, user }) {
+			console.log('session', session, 'token', token, 'user', user)
+			if (token) {
+				session.name = token.name
+				session.role = token.role
+			}
 			return session
 		},
 		async jwt({ token, user, account, profile, isNewUser }) {
+			console.log(
+				'token',
+				token,
+				'user',
+				user,
+				'account',
+				account,
+				'profile',
+				profile,
+				'isNewUser',
+				isNewUser
+			)
+			if (user) {
+				token.name = user.name
+				token.role = user.role
+			}
 			return token
 		},
 
