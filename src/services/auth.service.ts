@@ -19,7 +19,7 @@ class AuthService {
 
 		const user = {
 			id: '1',
-			name: username,
+			username: username,
 			role: 'admin',
 		}
 		console.log(user)

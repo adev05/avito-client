@@ -9,13 +9,27 @@ import { useState } from 'react'
 export default function SignIn() {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const [error, setError] = useState('')
+
 	async function onSubmit(event: React.SyntheticEvent) {
 		event.preventDefault()
 
-		// console.log(username, password)
+		if (!username && !password) {
+			setError('Поля не могут быть пустыми')
+			return
+		}
+		if (!username) {
+			setError('Поле логин не может быть пустым')
+			return
+		}
+		if (!password) {
+			setError('Поле пароль не может быть пустым')
+			return
+		}
 
 		signIn('avito-auth', { username, password })
 	}
+
 	return (
 		<>
 			<div className='container relative h-screen flex-col items-center justify-center flex'>
@@ -59,6 +73,7 @@ export default function SignIn() {
 										onChange={e => setPassword(e.target.value)}
 									/>
 								</div>
+								{error && <p className='text-red-500'>{error}</p>}
 								<Button>Войти</Button>
 							</div>
 						</form>

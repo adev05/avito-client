@@ -30,7 +30,7 @@ export const authOptions = {
 
 				if (!response) return null
 
-				console.log('response', response)
+				// console.log('response', response)
 
 				if (response) {
 					return response
@@ -43,28 +43,28 @@ export const authOptions = {
 
 	callbacks: {
 		async session({ session, token, user }) {
-			console.log('session', session, 'token', token, 'user', user)
+			// console.log('session', session, 'token', token, 'user', user)
 			if (token) {
-				session.name = token.name
+				session.username = token.username
 				session.role = token.role
 			}
 			return session
 		},
 		async jwt({ token, user, account, profile, isNewUser }) {
-			console.log(
-				'token',
-				token,
-				'user',
-				user,
-				'account',
-				account,
-				'profile',
-				profile,
-				'isNewUser',
-				isNewUser
-			)
+			// console.log(
+			// 	'token',
+			// 	token,
+			// 	'user',
+			// 	user,
+			// 	'account',
+			// 	account,
+			// 	'profile',
+			// 	profile,
+			// 	'isNewUser',
+			// 	isNewUser
+			// )
 			if (user) {
-				token.name = user.name
+				token.username = user.username
 				token.role = user.role
 			}
 			return token
@@ -77,7 +77,7 @@ export const authOptions = {
 			return true
 		},
 		async redirect({ baseUrl }) {
-			return `${baseUrl}/protected`
+			return `${baseUrl}/profile`
 		},
 	},
 
