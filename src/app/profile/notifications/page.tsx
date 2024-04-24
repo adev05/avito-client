@@ -1,6 +1,7 @@
 'use client'
 
 import { Header } from '@/components/header/header'
+import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
 
 export default function Page() {
@@ -126,7 +127,27 @@ export default function Page() {
 				{data?.role === 'admin' && (
 					<div>
 						<h5 className='text-md text-gray-600 mb-2'>Создание уведомлений</h5>
-						<p>add notification</p>
+						{/* <p>add notification</p> */}
+						<div className='flex gap-2'>
+							<div className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'>
+								<div className='flex gap-1 items-center text-gray-600 text-sm'></div>
+								<p className='text-md'>title</p>
+							</div>
+							<div className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'>
+								<div className='flex gap-1 items-center text-gray-600 text-sm'></div>
+								<p className='text-md'>description</p>
+							</div>
+							<div className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'>
+								<div className='flex gap-1 items-center text-gray-600 text-sm'></div>
+								<p className='text-md'>role</p>
+							</div>
+							<Button className='w-[calc((100%-1.5rem)/4)]'>Создать</Button>
+							{/* <div className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'>
+								<div className='flex gap-1 items-center text-gray-600 text-sm'></div>
+								<p className='text-md'>title</p>
+								<Button />
+							</div> */}
+						</div>
 					</div>
 				)}
 			</main>
