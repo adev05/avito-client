@@ -33,26 +33,30 @@ export default function Profile() {
 						<h1 className='text-3xl font-semibold mb-2'>
 							Пуш-уведомления Авито
 						</h1>
-						<p className='text-gray-600 flex gap-1'>
+						<div className='text-gray-600 flex gap-1'>
 							разработчики:
 							<HoverCard>
-								<HoverCardTrigger>
-									<p className='text-black font-medium hover:underline cursor-pointer'>
-										@A_Grady
-									</p>
+								<HoverCardTrigger
+									className='text-black font-medium hover:underline cursor-pointer'
+									href='https://t.me/A_Gradyt'
+									target='_blank'
+								>
+									@A_Grady
 								</HoverCardTrigger>
 								<HoverCardContent>Frontend developer</HoverCardContent>
 							</HoverCard>
 							,
 							<HoverCard>
-								<HoverCardTrigger>
-									<p className='text-black font-medium hover:underline cursor-pointer'>
-										@zefercka
-									</p>
+								<HoverCardTrigger
+									className='text-black font-medium hover:underline cursor-pointer'
+									href='https://t.me/zefercka'
+									target='_blank'
+								>
+									@zefercka
 								</HoverCardTrigger>
 								<HoverCardContent>Backend developer</HoverCardContent>
 							</HoverCard>
-						</p>
+						</div>
 					</div>
 					<Link href={'/profile/notifications'}>
 						<Button variant={'outline'}>Перейти к уведомлениям</Button>
