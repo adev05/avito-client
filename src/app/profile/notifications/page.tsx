@@ -1,16 +1,15 @@
 'use client'
 
 import { Header } from '@/components/header/header'
-import { Button } from '@/components/ui/button'
 import { useSession } from 'next-auth/react'
 
-export default function Page() {
+export default function NotificationsPage() {
 	const notifications = [
 		{
 			id: 1,
 			title: 'Заголовок уведомления 1',
 			description: 'Описание уведомления 1',
-			date: '2022-01-01',
+			date: Date(),
 			isRead: true,
 			author: 1,
 			role_to: 'admin',
@@ -47,7 +46,7 @@ export default function Page() {
 			title: 'Заголовок уведомления 5',
 			description: 'Описание уведомления 5',
 			date: '2022-05-01',
-			isRead: true,
+			isRead: false,
 			author: 1,
 			role_to: 'admin',
 		},
@@ -74,7 +73,7 @@ export default function Page() {
 			title: 'Заголовок уведомления 8',
 			description: 'Описание уведомления 8',
 			date: '2022-08-01',
-			isRead: true,
+			isRead: false,
 			author: 1,
 			role_to: 'admin',
 		},
@@ -92,14 +91,14 @@ export default function Page() {
 			title: 'Заголовок уведомления 10',
 			description: 'Описание уведомления 10',
 			date: '2022-10-01',
-			isRead: true,
+			isRead: false,
 			author: 1,
 			role_to: 'admin',
 		},
 	]
 
 	const session = useSession()
-	const data = session.data
+	const user = session.data?.user
 
 	return (
 		<>
@@ -113,43 +112,30 @@ export default function Page() {
 							{notifications.map(notification => (
 								<div
 									key={notification.id}
-									className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'
+									className={
+										'py-2 px-4 border cursor-pointer rounded-md md:w-[calc((100%-1rem)/2)] xl:w-[calc((100%-1.5rem)/4)] w-full transition-all' +
+										(notification.isRead
+											? ' bg-gray-100'
+											: ' hover:border-gray-400')
+									}
 								>
-									<div className='flex gap-1 items-center text-gray-600 text-sm'>
-										<p>Дата {notification.date}</p>
-									</div>
-									<p className='text-md'>{notification.title}</p>
+									<p className='text-gray-600 text-sm mb-1'>
+										{new Date(notification.date).toLocaleDateString('ru-RU', {
+											day: 'numeric',
+											month: 'long',
+											year: 'numeric',
+										})}
+									</p>
+									<p className='text-md font-medium'>{notification.title}</p>
+									<p className='text-sm'>{notification.description}</p>
 								</div>
 							))}
 						</div>
 					</div>
 				)}
-				{data?.role === 'admin' && (
-					<div>
-						<h5 className='text-md text-gray-600 mb-2'>Создание уведомлений</h5>
-						{/* <p>add notification</p> */}
-						<div className='flex gap-2'>
-							<div className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'>
-								<div className='flex gap-1 items-center text-gray-600 text-sm'></div>
-								<p className='text-md'>title</p>
-							</div>
-							<div className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'>
-								<div className='flex gap-1 items-center text-gray-600 text-sm'></div>
-								<p className='text-md'>description</p>
-							</div>
-							<div className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'>
-								<div className='flex gap-1 items-center text-gray-600 text-sm'></div>
-								<p className='text-md'>role</p>
-							</div>
-							<Button className='w-[calc((100%-1.5rem)/4)]'>Создать</Button>
-							{/* <div className='p-2 border rounded-md w-[calc((100%-1.5rem)/4)]'>
-								<div className='flex gap-1 items-center text-gray-600 text-sm'></div>
-								<p className='text-md'>title</p>
-								<Button />
-							</div> */}
-						</div>
-					</div>
-				)}
+				{/* {user?.role === 'admin' && (
+					
+				)} */}
 			</main>
 		</>
 	)

@@ -9,22 +9,19 @@ class AuthService {
 			username,
 			password,
 		}
-		console.log('body:', body)
-		// const response = await http.post('/auth/signIn', body)
-		// console.log(response)
+		try {
+			const response = await http.post('/user/signin', body)
 
-		// if (response.data.accessToken) {
-		// 	localStorage.setItem('user', JSON.stringify(response.data))
-		// }
+			// console.log('response', response.data)
 
-		const user = {
-			id: '1',
-			username: username,
-			role: 'admin',
+			if (!response.data) return null
+
+			response.data.role = response.data.role.roleName
+
+			return response.data
+		} catch (e) {
+			return null
 		}
-		console.log(user)
-		return user
-		// return response.data
 	}
 
 	// async logout() {
@@ -47,4 +44,6 @@ class AuthService {
 	// }
 }
 
-export default new AuthService()
+const authService = new AuthService()
+
+export default authService

@@ -1,16 +1,8 @@
 import authService from '@/services/auth.service'
-import NextAuth from 'next-auth'
+import NextAuth, { AuthOptions, NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-declare module 'next-auth' {
-	interface Session {
-		id: number
-		username: string
-		role: string
-	}
-}
-
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
 	providers: [
 		CredentialsProvider({
 			id: 'avito-auth',
@@ -21,20 +13,26 @@ export const authOptions = {
 				password: { label: 'password', type: 'password' },
 			},
 			async authorize(credentials, req) {
-				console.log(credentials)
+				try {
+					// console.log(credentials)
 
-				const response = await authService.signIn(
-					credentials.username,
-					credentials.password
-				)
+					if (!credentials) return null
 
-				if (!response) return null
+					const response = await authService.signIn(
+						credentials.username,
+						credentials.password
+					)
 
-				// console.log('response', response)
+					if (!response) return null
 
-				if (response) {
-					return response
-				} else {
+					// console.log('response_auth', response)
+
+					if (response) {
+						return response
+					} else {
+						return null
+					}
+				} catch (e) {
 					return null
 				}
 			},
@@ -42,28 +40,16 @@ export const authOptions = {
 	],
 
 	callbacks: {
-		async session({ session, token, user }) {
-			// console.log('session', session, 'token', token, 'user', user)
-			if (token) {
-				session.username = token.username
-				session.role = token.role
+		async session({ session, token }) {
+			if (session?.user) {
+				session.user.username = token.username
+				session.user.role = token.role
 			}
 			return session
 		},
-		async jwt({ token, user, account, profile, isNewUser }) {
-			// console.log(
-			// 	'token',
-			// 	token,
-			// 	'user',
-			// 	user,
-			// 	'account',
-			// 	account,
-			// 	'profile',
-			// 	profile,
-			// 	'isNewUser',
-			// 	isNewUser
-			// )
+		async jwt({ token, user }) {
 			if (user) {
+				token.uid = user.id
 				token.username = user.username
 				token.role = user.role
 			}
@@ -80,6 +66,9 @@ export const authOptions = {
 			return `${baseUrl}/profile`
 		},
 	},
+	session: {
+		strategy: 'jwt',
+	},
 
 	pages: {
 		signIn: '/auth/signin',
@@ -87,6 +76,6 @@ export const authOptions = {
 	},
 }
 
-export const handler = NextAuth(authOptions)
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }

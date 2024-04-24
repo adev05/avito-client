@@ -3,15 +3,25 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { signIn } from 'next-auth/react'
-import { useState } from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import { redirect, useRouter } from 'next/navigation'
+import { SyntheticEvent, useState } from 'react'
 
 export default function SignIn() {
+	const { data: session, status } = useSession()
+	console.log('session', session)
+	console.log('status', status)
+
+	if (status === 'authenticated') {
+		redirect('/profile')
+	}
+
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState('')
+	const { push } = useRouter()
 
-	async function onSubmit(event: React.SyntheticEvent) {
+	async function onSubmit(event: SyntheticEvent) {
 		event.preventDefault()
 
 		if (!username && !password) {
@@ -27,7 +37,19 @@ export default function SignIn() {
 			return
 		}
 
-		signIn('avito-auth', { username, password })
+		const response = await signIn('avito-auth', {
+			redirect: false,
+			callbackUrl: '/profile',
+			username,
+			password,
+		})
+		console.log('response', response)
+		if (response?.error) {
+			setError('Неверный логин или пароль')
+			return
+		} else {
+			push('/profile')
+		}
 	}
 
 	return (
@@ -74,7 +96,9 @@ export default function SignIn() {
 									/>
 								</div>
 								{error && <p className='text-red-500'>{error}</p>}
-								<Button>Войти</Button>
+								<Button className='bg-[#00aaff] hover:bg-[#0099f7]'>
+									Войти
+								</Button>
 							</div>
 						</form>
 					</div>
