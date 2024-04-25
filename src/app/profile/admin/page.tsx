@@ -47,7 +47,7 @@ export default function Page() {
 		}
 
 		await toastService
-			.createNotification(title, description, roles, user.id)
+			.createNotification(title, description, roles, user)
 			.then(() => {
 				toast.success('Успешно!', {
 					description: 'Уведомление создано',
