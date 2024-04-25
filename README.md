@@ -10,4 +10,4 @@
    `docker build -t avito-client .`
 
 4. Run the Docker container:
-   `docker run -p 3000:3000 -e SERVER_URL=http://your-server-url avito-client`
+   `docker run -p 3000:3000 -e SERVER_URL=http://your-server-url/api avito-client`

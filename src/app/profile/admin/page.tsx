@@ -11,7 +11,6 @@ import MultipleSelector, {
 	MultipleSelectorRef,
 	Option,
 } from '@/components/ui/multiple-selector'
-import { socket } from '@/services/socket'
 import toastService from '@/services/toast.service'
 import { useSession } from 'next-auth/react'
 import { SyntheticEvent, useEffect, useRef, useState } from 'react'
@@ -38,7 +37,7 @@ export default function Page() {
 			item => item.value
 		)
 
-		// console.log(title, description, roles)
+		console.log(title, description, roles, user)
 
 		if (!title || !description || !roles || roles?.length === 0 || !user?.id) {
 			toast.error('Ошибка!', {
