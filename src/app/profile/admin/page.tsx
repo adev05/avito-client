@@ -30,7 +30,7 @@ export default function Page() {
 	const session = useSession()
 	const user = session.data?.user
 
-	const onSubmit = (event: SyntheticEvent) => {
+	const onSubmit = async (event: SyntheticEvent) => {
 		event.preventDefault()
 
 		const roles = refMultipleSelectorRef.current?.selectedValue.map(
@@ -46,11 +46,24 @@ export default function Page() {
 			return
 		}
 
-		toastService.createNotification(title, description, roles, user?.id)
+		await toastService
+			.createNotification(title, description, roles, user.id)
+			.then(() => {
+				toast.success('Успешно!', {
+					description: 'Уведомление создано',
+				})
+			})
+			.catch(() => {
+				toast.error('Ошибка!', {
+					description: 'Не удалось создать уведомление',
+				})
+			})
 
-		toast.info('Успешно', {
-			description: 'description',
-		})
+		// console.log('response', response)
+
+		// toast.info('Успешно', {
+		// 	description: 'description',
+		// })
 
 		// toast('Event has been created', {
 		// 	description: 'Sunday, December 03, 2023 at 9:00 AM',
