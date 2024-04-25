@@ -38,7 +38,7 @@ export default function Profile() {
 							<HoverCard>
 								<HoverCardTrigger
 									className='text-black font-medium hover:underline cursor-pointer'
-									href='https://t.me/A_Gradyt'
+									href='https://t.me/A_Grady'
 									target='_blank'
 								>
 									@A_Grady
