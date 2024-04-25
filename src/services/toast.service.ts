@@ -1,3 +1,4 @@
+import { toast } from 'sonner'
 import http from '../../http-common'
 import { socket } from './socket'
 
@@ -17,7 +18,7 @@ class ToastService {
 			isRead: false,
 		}
 		try {
-			const response = await http.post('/toast/create', data)
+			const response = await http.post('/notification/create', data)
 
 			if (!response.data) return null
 
@@ -25,10 +26,15 @@ class ToastService {
 
 			socket.on('notification', data => {
 				console.log(data)
+				toast.info(data.title, {
+					description: description,
+				})
 				return data
 			})
 
-			return response.data
+			return null
+
+			// return response.data
 		} catch (e) {
 			return null
 		}
