@@ -5,16 +5,16 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { signIn, useSession } from 'next-auth/react'
 import { redirect, useRouter } from 'next/navigation'
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useEffect, useState } from 'react'
 
 export default function SignIn() {
 	const { data: session, status } = useSession()
-	console.log('session', session)
-	console.log('status', status)
 
-	if (status === 'authenticated') {
-		redirect('/profile')
-	}
+	useEffect(() => {
+		if (status === 'authenticated') {
+			redirect('/profile')
+		}
+	}, [status])
 
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')

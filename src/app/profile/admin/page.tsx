@@ -11,12 +11,12 @@ import MultipleSelector, {
 	MultipleSelectorRef,
 	Option,
 } from '@/components/ui/multiple-selector'
+import { socket } from '@/services/socket'
+import toastService from '@/services/toast.service'
+import { useSession } from 'next-auth/react'
 import { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-// import MultipleSelector, {
-// 	MultipleSelectorRef,
-// 	Option,
-// } from '@/components/ui/multiple-selector'
+
 export default function Page() {
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
@@ -28,6 +28,9 @@ export default function Page() {
 		{ label: 'Администратор', value: 'admin' },
 	]
 
+	const session = useSession()
+	const user = session.data?.user
+
 	const onSubmit = (event: SyntheticEvent) => {
 		event.preventDefault()
 
@@ -37,12 +40,14 @@ export default function Page() {
 
 		// console.log(title, description, roles)
 
-		if (!title || !description || roles?.length === 0) {
+		if (!title || !description || !roles || roles?.length === 0 || !user?.id) {
 			toast.error('Ошибка!', {
 				description: 'Поля должны быть заполнены',
 			})
 			return
 		}
+
+		toastService.createNotification(title, description, roles, user?.id)
 
 		toast.info('Успешно', {
 			description: 'description',

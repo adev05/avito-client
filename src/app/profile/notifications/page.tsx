@@ -97,9 +97,6 @@ export default function NotificationsPage() {
 		},
 	]
 
-	const session = useSession()
-	const user = session.data?.user
-
 	return (
 		<>
 			<Header />
