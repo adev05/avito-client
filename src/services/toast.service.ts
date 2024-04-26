@@ -7,8 +7,6 @@ import { DefaultUser } from 'next-auth'
 // import { getSocketResponse } from '@/services/socket/index'
 
 class ToastService {
-	private notificationListener: ((data: any) => void) | undefined
-
 	async createNotification(
 		title: string,
 		description: string,
@@ -28,7 +26,13 @@ class ToastService {
 			isRead: false,
 		}
 
-		socket.emit('createNotification', body)
+		// console.log('notification added:', body)
+
+		try {
+			socket.emit('createNotification', body)
+		} catch (e) {
+			console.log(e)
+		}
 	}
 }
 

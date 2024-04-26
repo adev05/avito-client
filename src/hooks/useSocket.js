@@ -21,11 +21,11 @@ export const useSocket = (room, username) => {
 				messageType: 'CLIENT',
 			})
 		},
-		[socket, room]
+		[socket, room, username]
 	)
 
 	useEffect(() => {
-		const socketBaseUrl = process.env.SOCKET_URL || 'localhost:8081/chat'
+		const socketBaseUrl = process.env.SOCKET_URL || 'http://localhost:8081/chat'
 		const s = io(socketBaseUrl, {
 			query: `username=${username}&room=${room}`,
 		})

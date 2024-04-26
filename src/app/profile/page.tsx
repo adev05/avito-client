@@ -10,54 +10,9 @@ import {
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { socket } from '@/services/socket'
-import { toast } from 'sonner'
-
 export default function Profile() {
-	const [isConnected, setIsConnected] = useState(false)
-	const [transport, setTransport] = useState('N/A')
-
 	const session = useSession()
 	const user = session.data?.user
-
-	useEffect(() => {
-		console.log('connected')
-		if (socket.connected) {
-			onConnect()
-		}
-
-		function onConnect() {
-			setIsConnected(true)
-			setTransport(socket.io.engine.transport.name)
-
-			socket.io.engine.on('upgrade', transport => {
-				setTransport(transport.name)
-			})
-		}
-
-		function onDisconnect() {
-			setIsConnected(false)
-			setTransport('N/A')
-		}
-
-		socket.on('connect', onConnect)
-		socket.on('disconnect', onDisconnect)
-
-		socket.on('notification', data => {
-			console.log('Received notification:', data)
-			toast.info(data.title, {
-				description: data.description,
-			})
-		})
-
-		return () => {
-			socket.off('connect', onConnect)
-			socket.off('disconnect', onDisconnect)
-			socket.off('notification', () => {}) // remove the event listener when the component unmounts
-		}
-	}, [])
 
 	// console.log('session', session)
 	return (
